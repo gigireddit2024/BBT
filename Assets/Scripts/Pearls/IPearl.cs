@@ -1,7 +1,7 @@
-using UnityEngine;
-
 public interface IPearl
 {
-    void Initialize(Vector2 initialVelocity);
-    void Pop(); // what happens when the pearl is removed / tapped
+    void SetDistance(float distanceAlongPath);
+    float Distance { get; }
+
+    void Pop();
 }
