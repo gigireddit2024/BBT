@@ -9,6 +9,6 @@ PhysicsMaterial2D:
   m_Name: PearlBounce
   serializedVersion: 2
   friction: 0
-  bounciness: 10
+  bounciness: 1
   m_FrictionCombine: 0
   m_BounceCombine: 4

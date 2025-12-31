@@ -4,30 +4,43 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class PearlController : MonoBehaviour, IPearl
 {
-    [SerializeField] private float initialSpeed = 1.5f; // much gentler than before
+    [Header("Movement (must implement IPearlMovement)")]
+    [SerializeField] private MonoBehaviour movementBehaviour; // assign RandomBounceMovement2D
 
     private Rigidbody2D rb;
+    private IPearlMovement movement;
     private bool initialized;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        movement = movementBehaviour as IPearlMovement;
+
+        if (movement == null)
+        {
+            Debug.LogError("movementBehaviour must implement IPearlMovement.", this);
+        }
     }
 
     private void OnEnable()
     {
         if (!initialized)
         {
-            Vector2 randomDir = Random.insideUnitCircle.normalized;
-            Initialize(randomDir * initialSpeed);
+            Initialize(Vector2.zero); // velocity decided by movement strategy
         }
 
         PearlEvents.RaisePearlSpawned(this);
     }
 
+    private void FixedUpdate()
+    {
+        movement?.Tick(Time.fixedDeltaTime);
+    }
+
     public void Initialize(Vector2 initialVelocity)
     {
-        rb.linearVelocity = initialVelocity;
+        // Keep IPearl.Initialize for your assignment interface, but delegate actual movement.
+        movement?.Initialize(rb);
         initialized = true;
     }
 
